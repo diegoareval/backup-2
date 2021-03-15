@@ -30,7 +30,7 @@ const nylas = require("../config/nylas.config").nylas
       })
   };
 
-  exports.getThreadList = ()=> async function(req, res) {
+  exports.getThreadList = () => async function(req, res) {
     nylas.threads.list({}).then(threads => {
         return res.json({
             status: true,
