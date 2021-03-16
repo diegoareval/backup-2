@@ -1,6 +1,41 @@
+const Nylas = require('nylas');
+
+Nylas.config({
+   clientId: "2tfto6xg8h5kce6loz54d4bwx",
+   clientSecret: "blzuh88vh7irnux5a3wyhn0zq"
+})
+
 
   exports.connect = () =>
-  async function (req, res) {
-     console.log("aqui");
-     res.send("here")
+  async function (req, res, next) {
+   options = {
+      redirectURI: 'http://localhost:3000/oauth/callback',
+      scopes: ['email.read_only', 'email.send'],
+    };
+    res.redirect(Nylas.urlForAuthentication(options));
+  
+  }
+
+  exports.callback = () =>
+  async function (req, res, next) {
+   if (req.query.code) {
+      Nylas.exchangeCodeForToken(req.query.code).then(token => {
+         console.log(token);
+         return res.json({
+            status: true,
+            token
+          });
+        // save the token to the current session, save it to the user model, etc.
+      }).catch((error)=> {
+         return res.json({
+             status: false,
+             message: "Authentication error:" + error,
+           });
+       });
+    } else if (req.query.error) {
+      return res.json({
+         status: false,
+         message: req.query.error,
+       });
+    }
   }

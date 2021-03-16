@@ -96,7 +96,6 @@ nylas.events.list({calendar_id: calendar.id, limit: 10 }).then(events => {
 
   exports.createContact = ()=> async function(req, res) {
       const {given_name, notes, emails, phone_numbers, web_pages} = req.body
-     console.log(given_name);
     const contact = nylas.contacts.build({
         given_name: given_name,
         notes,
@@ -104,7 +103,6 @@ nylas.events.list({calendar_id: calendar.id, limit: 10 }).then(events => {
         phone_numbers,
         web_pages
     });
-    
     contact.save().then( contact => {
         return res.json({
             status: true,
