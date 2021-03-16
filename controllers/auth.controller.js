@@ -1,10 +1,4 @@
-const Nylas = require('nylas');
-
-Nylas.config({
-   clientId: "2tfto6xg8h5kce6loz54d4bwx",
-   clientSecret: "blzuh88vh7irnux5a3wyhn0zq"
-})
-
+const Nylas = require("../config/nylas.config").NylasServices
 
   exports.connect = () =>
   async function (req, res, next) {
@@ -14,6 +8,21 @@ Nylas.config({
     };
     res.redirect(Nylas.urlForAuthentication(options));
   
+  }
+
+  exports.me = () => async function (req, res, next) {
+    const nylas = Nylas.with('OtjrpwBbWlCH0bu4DNqPurlh2o1s7i');
+    nylas.account.get().then(account =>{
+      return res.json({
+        status: true,
+        me: account
+      });
+    }).catch((error)=> {
+      return res.json({
+        status: false,
+        message: "error:" + error,
+      });
+    });
   }
 
   exports.callback = () =>
