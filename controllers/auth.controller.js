@@ -29,12 +29,34 @@ const Nylas = require("../config/nylas.config").NylasServices
   async function (req, res, next) {
    if (req.query.code) {
       Nylas.exchangeCodeForToken(req.query.code).then(token => {
-         console.log(token);
+         /* try{
+           const user = req.user
+           const userRef = await db.collection(config.collection.users).doc(user.uid);
+           const input = {
+             email: "",
+             accessToken: token,
+             provider: "nylas",
+             user: userRef
+           }
+
+           const saveNylas = await db.collection("Nylas").add(input)
+           return res.json({
+            status: true,
+            token,
+            saveNylas
+          });
+         }
+         catch(error){
+          return res.json({
+            status: false,
+            message: "couldn't store token"
+          });
+         }
+         */
          return res.json({
             status: true,
             token
           });
-        // save the token to the current session, save it to the user model, etc.
       }).catch((error)=> {
          return res.json({
              status: false,
